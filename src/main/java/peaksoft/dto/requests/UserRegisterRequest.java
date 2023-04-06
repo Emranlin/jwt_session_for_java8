@@ -3,11 +3,14 @@ package peaksoft.dto.requests;
 import lombok.Builder;
 
 
+
 @Builder
-public record AuthRequest(
+public record UserRegisterRequest(
         String email,
         String password
 ) {
 
-
 }
+
+
+

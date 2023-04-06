@@ -1,50 +1,52 @@
 package peaksoft.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import peaksoft.enums.Role;
 
+import javax.management.relation.Role;
 import java.util.Collection;
 import java.util.List;
 
-@Entity
-@Table(name = "auth_infos")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class AuthInfo implements UserDetails {
+@Entity
+@Table(name = "user")
+public class User implements UserDetails {
     @Id
-    @SequenceGenerator(
-            name = "authInfo_id_gen",
-            sequenceName = "authInfo_id_seq",
-            allocationSize = 1)
-    @GeneratedValue(
-            generator = "authInfo_id_gen",
-            strategy = GenerationType.SEQUENCE
-    )
-
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    @SequenceGenerator(name = "user_seq")
+    @Column(name = "id", nullable = false)
     private Long id;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
+
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "details_id")
+    private Details Details;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(role.getRoleName()));
     }
 
     @Override
     public String getUsername() {
-        return this.email;
+        return this.firstName;
     }
-
     @Override
     public String getPassword() {
         return this.password;

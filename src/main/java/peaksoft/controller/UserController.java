@@ -5,20 +5,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import peaksoft.dto.requests.AuthRequest;
-import peaksoft.dto.responses.AuthResponse;
-import peaksoft.service.AuthService;
+import peaksoft.dto.requests.UserRegisterRequest;
+import peaksoft.dto.responses.UserRegisterResponse;
+import peaksoft.service.UserService;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
-public class AuthController {
+public class UserController {
 
-    private final AuthService authService;
+    private final UserService userService;
 
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody AuthRequest authRequest) {
-        return authService.authenticate(authRequest);
+    public UserRegisterResponse login(@RequestBody UserRegisterRequest userRequest) {
+        return userService.authenticate(userRequest);
     }
 
 
